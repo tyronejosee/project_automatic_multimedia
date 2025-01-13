@@ -1,7 +1,3 @@
-"""
-Logging config.
-"""
-
 import logging
 
 from colorlog import ColoredFormatter
