@@ -6,10 +6,10 @@ from pymkv.MKVTrack import MKVTrack
 
 # from icecream import ic
 
-from .command import Command
+from core.interfaces.command_interface import ICommand
 
 
-class ExtractSubtitlesCommand(Command):
+class ExtractSubtitlesCommand(ICommand):
     def __init__(self, directory: str) -> None:
         self.directory: str = directory
 
@@ -19,10 +19,8 @@ class ExtractSubtitlesCommand(Command):
         """
         mkv_files: list[str] = self._find_mkv_files()
         if not mkv_files:
-            print("No .mkv files found.")
-            return
+            raise FileNotFoundError("No .mkv files found.")
 
-        print("Files found:")
         for file in mkv_files:
             print(file)
             self._process_mkv_file(file)
@@ -48,7 +46,7 @@ class ExtractSubtitlesCommand(Command):
                 if track.track_type == "subtitles":
                     self._extract_subtitle(file, track)
         except Exception as e:
-            print(f"Error processing {file}: {e}")
+            print(f"Error {file}: {e}")
 
     def _get_subtitle_type(self, format: str | None) -> str:
         if format == "SubRip/SRT":
@@ -58,7 +56,7 @@ class ExtractSubtitlesCommand(Command):
         elif format == "HDMV PGS":
             return ".sup"
         else:
-            return ".srt"
+            raise ValueError(f"Unrecognized subtitle format '{format}'")
 
     def _extract_subtitle(self, file: str, track: MKVTrack) -> None:
         """
@@ -66,8 +64,8 @@ class ExtractSubtitlesCommand(Command):
         """
         parent_directory: str = os.path.dirname(file)
         track_name: str = track.track_name if track.track_name else "Subtitle"
-        subtitle_type: str = self._get_subtitle_type(track._track_codec)
-        output_file_name: str = f"[{track.language}] {track_name}{subtitle_type}"
+        sub_type: str = self._get_subtitle_type(track._track_codec)
+        output_file_name: str = f"[{track.language}] {track_name}{sub_type}"
         output_file_path: str = os.path.join(
             parent_directory,
             output_file_name,
@@ -84,4 +82,4 @@ class ExtractSubtitlesCommand(Command):
             subprocess.run(command, check=True)
             print(f"Subtitle extracted to: {output_file_path}")
         except subprocess.CalledProcessError as e:
-            print(f"Error extracting subtitles from {file}: {e}")
+            print(f"Command error: [{file}] {e}")
