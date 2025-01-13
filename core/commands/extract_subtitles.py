@@ -4,8 +4,6 @@ import subprocess
 from pymkv import MKVFile
 from pymkv.MKVTrack import MKVTrack
 
-# from icecream import ic
-
 from core.interfaces.command_interface import ICommand
 
 

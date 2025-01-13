@@ -1,8 +1,6 @@
 import os
 import shutil
 
-# from icecream import ic
-
 from core.interfaces.command_interface import ICommand
 
 
