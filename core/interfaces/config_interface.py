@@ -13,12 +13,52 @@ class IConfig(ABC):
 
     @property
     @abstractmethod
+    def INPUT_FOLDER(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
     def OUTPUT_FOLDER(self) -> str:
         pass
 
     @property
     @abstractmethod
+    def TEMP_FOLDER(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
+    def ICON_FOLDER(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
     def ANIME_URL(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
+    def DESIRED_WIDTH(self) -> int:
+        pass
+
+    @property
+    @abstractmethod
+    def DESIRED_HEIGHT(self) -> int:
+        pass
+
+    @property
+    @abstractmethod
+    def SERIES_SIZE(self) -> tuple:
+        pass
+
+    @property
+    @abstractmethod
+    def MOVIES_SIZE(self) -> tuple:
+        pass
+
+    @property
+    @abstractmethod
+    def SUPPORTED_FORMATS(self) -> list:
         pass
 
     @property

@@ -14,9 +14,10 @@ def main() -> None:
     try:
         cf = Config()
         if len(sys.argv) < 2:
-            raise CommandNotFound("Usage 'main.py <command>'")
+            raise CommandNotFound("Usage 'cli.py <command>'")
         command_name: str = sys.argv[1]
-        command: ICommand = CommandFactory.get_command(command_name, cf)
+        param: str = sys.argv[2] if len(sys.argv) > 2 else "Unknown"
+        command: ICommand = CommandFactory.get_command(cf, command_name, param)
         command.execute()
     except ValueError as e:
         logging.error(f"[Value]: {e}")
