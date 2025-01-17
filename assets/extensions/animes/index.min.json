@@ -1,0 +1,308 @@
+[
+  {
+    "name": "Aniyomi: AnimeFLV",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.animeflv",
+    "apk": "aniyomi-es.animeflv-v14.58.apk",
+    "lang": "es",
+    "code": 58,
+    "version": "14.58",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "AnimeFLV",
+        "lang": "es",
+        "id": "93702975723668971",
+        "baseUrl": "https://www3.animeflv.net"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: AnimeID",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.animeid",
+    "apk": "aniyomi-es.animeid-v14.9.apk",
+    "lang": "es",
+    "code": 9,
+    "version": "14.9",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "AnimeID",
+        "lang": "es",
+        "id": "3757015232925755985",
+        "baseUrl": "https://www.animeid.tv/"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: AnimeOnline.Ninja",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.animeonlineninja",
+    "apk": "aniyomi-es.animeonlineninja-v14.43.apk",
+    "lang": "es",
+    "code": 43,
+    "version": "14.43",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "AnimeOnline.Ninja",
+        "lang": "es",
+        "id": "2765997893095141044",
+        "baseUrl": "https://ww3.animeonline.ninja"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: Animeyt",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.animeyt",
+    "apk": "aniyomi-es.animeyt-v14.10.apk",
+    "lang": "es",
+    "code": 10,
+    "version": "14.10",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "AnimeYT",
+        "lang": "es",
+        "id": "3945696494710013768",
+        "baseUrl": "https://ytanime.tv"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: AsiaLiveAction",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.asialiveaction",
+    "apk": "aniyomi-es.asialiveaction-v14.33.apk",
+    "lang": "es",
+    "code": 33,
+    "version": "14.33",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "AsiaLiveAction",
+        "lang": "es",
+        "id": "5750872840863097496",
+        "baseUrl": "https://asialiveaction.com"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: Doramasyt",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.doramasyt",
+    "apk": "aniyomi-es.doramasyt-v14.16.apk",
+    "lang": "es",
+    "code": 16,
+    "version": "14.16",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "Doramasyt",
+        "lang": "es",
+        "id": "885919523581666049",
+        "baseUrl": "https://www.doramasyt.com"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: EstrenosDoramas",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.estrenosdoramas",
+    "apk": "aniyomi-es.estrenosdoramas-v14.1.apk",
+    "lang": "es",
+    "code": 1,
+    "version": "14.1",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "EstrenosDoramas",
+        "lang": "es",
+        "id": "9219401167730918156",
+        "baseUrl": "https://estrenosdoramas.es"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: Jkanime",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.jkanime",
+    "apk": "aniyomi-es.jkanime-v14.27.apk",
+    "lang": "es",
+    "code": 27,
+    "version": "14.27",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "Jkanime",
+        "lang": "es",
+        "id": "6007374093317538838",
+        "baseUrl": "https://jkanime.net"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: Katanime",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.katanime",
+    "apk": "aniyomi-es.katanime-v14.1.apk",
+    "lang": "es",
+    "code": 1,
+    "version": "14.1",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "Katanime",
+        "lang": "es",
+        "id": "2564532783405004779",
+        "baseUrl": "https://katanime.net"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: LACartoons",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.lacartoons",
+    "apk": "aniyomi-es.lacartoons-v14.5.apk",
+    "lang": "es",
+    "code": 5,
+    "version": "14.5",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "LACartoons",
+        "lang": "es",
+        "id": "4124511684994754369",
+        "baseUrl": "https://www.lacartoons.com"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: Latanime",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.latanime",
+    "apk": "aniyomi-es.latanime-v14.17.apk",
+    "lang": "es",
+    "code": 17,
+    "version": "14.17",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "Latanime",
+        "lang": "es",
+        "id": "7257892387451890645",
+        "baseUrl": "https://latanime.org"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: LegionAnime",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.legionanime",
+    "apk": "aniyomi-es.legionanime-v14.33.apk",
+    "lang": "es",
+    "code": 33,
+    "version": "14.33",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "LegionAnime",
+        "lang": "es",
+        "id": "508651506167756898",
+        "baseUrl": "https://legionanime.club/api"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: LocoPelis",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.locopelis",
+    "apk": "aniyomi-es.locopelis-v14.23.apk",
+    "lang": "es",
+    "code": 23,
+    "version": "14.23",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "LocoPelis",
+        "lang": "es",
+        "id": "7685749277599065785",
+        "baseUrl": "https://www.locopelis.com"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: MetroSeries",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.metroseries",
+    "apk": "aniyomi-es.metroseries-v14.13.apk",
+    "lang": "es",
+    "code": 13,
+    "version": "14.13",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "MetroSeries",
+        "lang": "es",
+        "id": "302544302370133084",
+        "baseUrl": "https://www3.seriesmetro.net"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: MonosChinos",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.monoschinos",
+    "apk": "aniyomi-es.monoschinos-v14.31.apk",
+    "lang": "es",
+    "code": 31,
+    "version": "14.31",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "MonosChinos",
+        "lang": "es",
+        "id": "6957694006954649296",
+        "baseUrl": "https://monoschinos2.net"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: MundoDonghua",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.mundodonghua",
+    "apk": "aniyomi-es.mundodonghua-v14.23.apk",
+    "lang": "es",
+    "code": 23,
+    "version": "14.23",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "MundoDonghua",
+        "lang": "es",
+        "id": "4356029013369426954",
+        "baseUrl": "https://www.mundodonghua.com"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: Tiodonghua.com",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.tiodonghua",
+    "apk": "aniyomi-es.tiodonghua-v14.7.apk",
+    "lang": "es",
+    "code": 7,
+    "version": "14.7",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "Tiodonghua.com",
+        "lang": "es",
+        "id": "6830054141432094072",
+        "baseUrl": "https://anime.tiodonghua.com"
+      }
+    ]
+  },
+  {
+    "name": "Aniyomi: VerAnimes",
+    "pkg": "eu.kanade.tachiyomi.animeextension.es.veranimes",
+    "apk": "aniyomi-es.veranimes-v14.4.apk",
+    "lang": "es",
+    "code": 4,
+    "version": "14.4",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "VerAnimes",
+        "lang": "es",
+        "id": "6262145028910416459",
+        "baseUrl": "https://wwv.veranimes.net"
+      }
+    ]
+  }
+]
