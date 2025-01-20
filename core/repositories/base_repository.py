@@ -1,5 +1,5 @@
 import uuid
-from sqlite3 import Connection, Cursor
+from sqlite3 import Connection, Cursor, Row
 
 
 class BaseRepository:
@@ -67,17 +67,17 @@ class BaseRepository:
             cursor.executemany(query, values)
             conn.commit()
 
-    def get_all(self) -> list[tuple]:
+    def get_all(self) -> list[dict]:
         """
         Retrieves all records from the table.
         """
         with self.db_connection as conn:
+            conn.row_factory = Row
             cursor: Cursor = conn.cursor()
-            query: str = f"""
-                SELECT * FROM {self.table_name}
-            """
+            query: str = f"SELECT * FROM {self.table_name}"
             cursor.execute(query)
-            return cursor.fetchall()
+            rows: list[Row] = cursor.fetchall()
+            return [dict(row) for row in rows]
 
     def get_by_id(self, record_id: str) -> dict | None:
         """

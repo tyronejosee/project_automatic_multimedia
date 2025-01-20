@@ -1,12 +1,15 @@
 from core.commands.build_icons import BuildIconsCommand
 from core.commands.copy_covers import CopyCoversCommand
 from core.commands.data_loader import DataLoaderCommand
+from core.commands.edit_mkv_metadata import EditMkvMetadataCommand
 from core.commands.extract_subtitles import ExtractSubtitlesCommand
 from core.commands.generate_anime_folders import GenerateAnimeFoldersCommand
+from core.commands.generate_icon_folders import GenerateIconFoldersCommand
 from core.commands.set_folder_icons import SetFolderIcons
 from core.interfaces.command_interface import ICommand
 from core.interfaces.config_interface import IConfig
 from core.utils.exceptions import CommandNotFound
+from .composite_command import CompositeCommand
 
 
 class CommandFactory:
@@ -46,8 +49,28 @@ class CommandFactory:
                 cf.DIRECTORY,
                 cf.OUTPUT_FOLDER,
             ),
+            "edit_mkv_metadata": EditMkvMetadataCommand(
+                param,
+                cf.DIRECTORY,
+            ),
+            "generate_type_folders": GenerateIconFoldersCommand(
+                param,
+                cf.ICON_FOLDER,
+            ),
             "extract_subtitles": ExtractSubtitlesCommand(
                 cf.DIRECTORY,
+            ),
+            # Composite Commands
+            "generate_folders_with_icon": CompositeCommand(
+                GenerateIconFoldersCommand(
+                    param,
+                    cf.INPUT_FOLDER,
+                ),
+                SetFolderIcons(
+                    param,
+                    cf.INPUT_FOLDER,
+                    cf.ICON_FOLDER,
+                ),
             ),
         }
         if name not in commands:
