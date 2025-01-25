@@ -43,8 +43,9 @@ class EditMkvMetadataCommand(ICommand):
         Process the file, clean it, add subtitles, and modify metadata.
         """
         file = MKVFile(input_file)
-        # if self._verify_audio_tracks(mkv, param, input_file):
-        #     return
+        if self._verify_file(file, param, input_file):
+            return
+
         self._remove_subtitles(file)
         self._clean_mkv_metadata(file)
         subtitles: list[dict] = self._find_subtitles(input_file)
@@ -81,26 +82,46 @@ class EditMkvMetadataCommand(ICommand):
                     track.default_track = False
 
         self._rename_tracks(file)
-        title: str = self._generate_title(input_file)
-        file.title = title
+        file.title = self._generate_title(input_file)
         output_file: str = os.path.splitext(input_file)[0] + " (1).mkv"
         file.mux(output_file)
-        print(f"Created {output_file}")
+        logging.info(f"Created {output_file}")
 
-    def _verify_audio_tracks(self, file, param, input_file) -> bool:
+    def _verify_file(self, file, param, input_file) -> bool:
         """
         Check if there are any audio tracks that are not AAC.
         """
+        subtitles: list[dict] = self._find_subtitles(input_file)
+        if not subtitles:
+            logging.warning(
+                f"Ignored {input_file} No subtitles found.",
+            )
+            return True
+
+        seen_languages = set()
+
         for track in file.tracks:
-            if (
-                param == "series"
-                and track.track_type == "audio"
-                and track._track_codec != "AAC"
-            ):
-                logging.warning(
-                    f"Ignored {input_file} ({track._track_codec})",
-                )
-                return True
+            if track.track_type == "audio":
+                if track.language in seen_languages:
+                    logging.warning(
+                        f"Ignored {input_file} Duplicate audio language {track.language}."
+                    )
+                    return True
+                seen_languages.add(track.language)
+
+            match (param, track.track_type, track._track_codec):
+                case ("series", "audio", codec) if codec != "AAC":
+                    logging.warning(
+                        f"Ignored {input_file} ({track._track_codec})",
+                    )
+                    return True
+                case ("movies", "audio", codec) if codec != "AC-3":
+                    logging.warning(
+                        f"Ignored {input_file} ({track._track_codec})",
+                    )
+                    return True
+                case _:
+                    pass
         return False
 
     def _remove_subtitles(self, file) -> None:
@@ -169,28 +190,70 @@ class EditMkvMetadataCommand(ICommand):
 
     def _rename_tracks(self, file) -> None:
         """
-        Rename audio and video tracks based on their language and type.
+        Rename audio and video tracks based on their language and type,
+        considering whether the content is 'series' or 'movies'.
         """
+        has_spanish_audio: bool = any(
+            track.track_type == "audio" and track.language == "spa"
+            for track in file.tracks
+        )
+
         for track in file.tracks:
-            if track.track_type == "video" and track.language == "und":
-                track.language = "jpn"
-                track.default_track = True
-                track.track_name = "日本語"
-            elif track.track_type == "video" and track.language == "eng":
-                track.default_track = True
-                track.track_name = "English"
-            elif track.track_type == "video" and track.language == "jpn":
-                track.default_track = True
-                track.track_name = "日本語"
-            elif track.track_type == "audio" and track.language == "jpn":
-                track.track_name = "日本語"
-            elif track.track_type == "audio" and track.language == "spa":
-                track.track_name = "Español"
+            match (self.param, track.track_type, track.language):
+                case ("series", "video", "und"):
+                    track.language = "jpn"
+                    track.track_name = "日本語"
+                    track.default_track = True
+
+                case ("series", "video", "jpn"):
+                    track.language = "jpn"
+                    track.track_name = "日本語"
+                    track.default_track = True
+
+                case ("series", "video", "eng"):
+                    track.track_name = "English"
+                    track.default_track = True
+
+                case ("series", "audio", "jpn"):
+                    track.track_name = "日本語"
+                    if not has_spanish_audio:
+                        track.default_track = True
+                    track.default_track = False
+
+                case ("series", "audio", "spa"):
+                    track.track_name = "Español"
+                    track.default_track = True
+
+                case ("movies", "video", "und"):
+                    track.language = "eng"
+                    track.track_name = "English"
+                    track.default_track = True
+
+                case ("movies", "video", "jpn"):
+                    track.track_name = "日本語"
+                    if not has_spanish_audio:
+                        track.default_track = True
+                    track.default_track = False
+
+                case ("movies", "audio", "spa"):
+                    track.track_name = "Español"
+                    track.default_track = True
+
+                case _:
+                    pass
 
     def _generate_title(self, file_path) -> str:
+        """
+        pending.
+        """
         folder: str = os.path.basename(os.path.dirname(file_path))
         folder_year: str = re.sub(r" \(\d{4}\)", "", folder)
         folder_year: str = re.sub(r"_ ", ": ", folder_year)
-        episode: list[str] = re.findall(r"- \d{2,4}", file_path)
-        title: str = f"{folder_year} {episode[0]}"
+
+        if self.param == "series":
+            episode: list[str] = re.findall(r"- (\d{2,4})", file_path)
+            title: str = f"{folder_year} - {episode[0]}"
+        elif self.param == "movies":
+            title: str = f"{folder_year}"
+
         return title
