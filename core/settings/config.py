@@ -4,8 +4,12 @@ Config file.
 
 import os
 
+from dotenv import load_dotenv
+
 from core.interfaces.config_interface import IConfig
 from core.utils.exceptions import PathNotFound
+
+load_dotenv()
 
 
 class Config(IConfig):
@@ -16,6 +20,7 @@ class Config(IConfig):
     TEMP_FOLDER: str = "D:\\Downloads\\_OK\\temp"
     ICON_FOLDER: str = "C:\\Image"
     ANIME_URL: str = "https://myanimelist.net/anime/season"
+    DISCORD_URL: str = os.getenv("DISCORD_URL", "")
 
     DESIRED_WIDTH: int = 256
     DESIRED_HEIGHT: int = 256

@@ -23,6 +23,9 @@ def main() -> None:
         command_name: str = sys.argv[1]
         param: str = sys.argv[2] if len(sys.argv) > 2 else "Unknown"
 
+        logging.error("Test observer pattern [ERROR]")
+        logging.warning("Test observer pattern [WARNING]")
+
         # # Get command and execute
         command: ICommand = CommandFactory.get_command(cf, command_name, param)
         command.execute()
