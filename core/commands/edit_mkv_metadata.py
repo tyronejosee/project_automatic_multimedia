@@ -103,9 +103,7 @@ class EditMkvMetadataCommand(ICommand):
         Remove all subtitle tracks from a file.
         """
         sub_tracks: list[int] = [
-            track.track_id
-            for track in file.tracks
-            if track.track_type == "subtitles"
+            track.track_id for track in file.tracks if track.track_type == "subtitles"
         ]
         for track_id in sorted(sub_tracks, reverse=True):
             try:
@@ -248,7 +246,8 @@ class EditMkvMetadataCommand(ICommand):
                     track.track_name = "日本語"
                     if not has_spanish_audio:
                         track.default_track = True
-                    track.default_track = False
+                    else:
+                        track.default_track = False
 
                 case ("series", "audio", "spa"):
                     track.track_name = "Español"

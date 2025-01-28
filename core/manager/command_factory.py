@@ -2,7 +2,7 @@ from core.commands.build_icons import BuildIconsCommand
 from core.commands.copy_covers import CopyCoversCommand
 from core.commands.data_loader import DataLoaderCommand
 from core.commands.edit_mkv_metadata import EditMkvMetadataCommand
-from core.commands.extract_subtitles import ExtractSubtitlesCommand
+from core.commands.extract_media import ExtractMediaCommand
 from core.commands.generate_anime_folders import GenerateAnimeFoldersCommand
 from core.commands.generate_icon_folders import GenerateIconFoldersCommand
 from core.commands.set_folder_icons import SetFolderIcons
@@ -57,7 +57,7 @@ class CommandFactory:
                 param,
                 cf.ICON_FOLDER,
             ),
-            "extract_subtitles": ExtractSubtitlesCommand(
+            "extract_subtitles": ExtractMediaCommand(
                 cf.DIRECTORY,
             ),
             # Composite Commands
