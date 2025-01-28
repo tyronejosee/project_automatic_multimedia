@@ -1,23 +1,44 @@
 # **Project Automatic Multimedia**
 
-## Sub Formats
+## **Params `<type>`**
 
-- HDMV PGS
--
+- `movies`
+- `series`
 
-```python
-# movie_repository: RepoInterface = database.get_movie_repository()
+## **Comandos**
 
-# all_movies: list = movie_repository.get_all()
-# movie_id: str = all_movies[0][0]
+```bash
+python cli.py build_icons <type>
+```
 
-# movie_repository.create_batch(records)
+```bash
+python cli.py generate_folders
+```
 
-# movie = movie_repository.get_by_id(movie_id)
+```bash
+python cli.py set_folder_icons <type>
+```
 
-# movie_repository.update(movie_id, title="Inception Updated")
+```bash
+python cli.py data_loader <type>
+```
 
-# movie_repository.soft_delete(movie_id)
+```bash
+python cli.py copy_covers
+```
 
-# movie_repository.delete(movie_id)
+```bash
+python cli.py edit_mkv_metadata <type>
+```
+
+```bash
+python cli.py generate_type_folders
+```
+
+```bash
+python cli.py extract_subtitles
+```
+
+```bash
+python cli.py generate_folders_with_icon <type>
 ```
