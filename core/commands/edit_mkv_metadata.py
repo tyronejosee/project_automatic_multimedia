@@ -25,7 +25,9 @@ class EditMkvMetadataCommand(ICommand):
             return
 
         for file_path in file_paths:
+            logging.info(f"Processing {file_path}...")
             self._process_mkv(file_path)
+        logging.info("Task completed successfully. 🎉")
 
     def _list_files(self, directory: str) -> list[str]:
         """
@@ -61,7 +63,7 @@ class EditMkvMetadataCommand(ICommand):
         """
         Check if there are any audio tracks that are not AAC.
         """
-        if not subtitles:
+        if not subtitles and self.param != "movies":
             logging.warning(
                 f"Ignored {file_path} No subtitles found.",
             )
@@ -78,22 +80,6 @@ class EditMkvMetadataCommand(ICommand):
                     )
                     return True
                 seen_languages.add(track.language)
-
-            match (self.param, track.track_type, track._track_codec):
-                # case ("series", "audio", codec) if codec != "AAC":
-                #     logging.warning(
-                #         f"Ignored {file_path} ({track._track_codec})",
-                #     )
-                #     return True
-
-                case ("movies", "audio", codec) if codec != "AC-3":
-                    logging.warning(
-                        f"Ignored {file_path} ({track._track_codec})",
-                    )
-                    return True
-
-                case _:
-                    pass
         return False
 
     def _remove_media(
@@ -113,7 +99,7 @@ class EditMkvMetadataCommand(ICommand):
                     file.remove_track(track_id)
                 except IndexError:
                     logging.error(
-                        f"{track_id} does not exist or has already been deleted.",
+                        f"{track_id} does not exist or was deleted.",
                     )
         if audios:
             aud_tracks: list[int] = [
@@ -126,7 +112,7 @@ class EditMkvMetadataCommand(ICommand):
                     file.remove_track(track_id)
                 except IndexError:
                     logging.error(
-                        f"{track_id} does not exist or has already been deleted.",
+                        f"{track_id} does not exist or was deleted.",
                     )
 
     def _clean_metadata(self, file: MKVFile) -> None:
@@ -139,7 +125,8 @@ class EditMkvMetadataCommand(ICommand):
 
     def _find_media(self, file_path: str) -> tuple[list[dict], list[dict]]:
         """
-        Pending.
+        Searches for subtitle and audio files
+        in the same folder as the given file.
         """
         folder: str = os.path.dirname(file_path)
         subtitles: list = []
@@ -164,7 +151,7 @@ class EditMkvMetadataCommand(ICommand):
                             "is_default": True,
                         }
                     )
-            elif archive.endswith(".aac"):
+            elif archive.endswith(".aac") or archive.endswith(".ac3"):
                 if archive == "jpn.aac":
                     audios.append(
                         {
@@ -172,6 +159,24 @@ class EditMkvMetadataCommand(ICommand):
                             "language": "jpn",
                             "track_name": "日本語",
                             "is_default": True,
+                        }
+                    )
+                elif archive == "spa.ac3":
+                    audios.append(
+                        {
+                            "path": os.path.join(folder, archive),
+                            "language": "spa",
+                            "track_name": "Español",
+                            "is_default": True,
+                        }
+                    )
+                elif archive == "jpn.ac3":
+                    audios.append(
+                        {
+                            "path": os.path.join(folder, archive),
+                            "language": "jpn",
+                            "track_name": "日本語",
+                            "is_default": False,
                         }
                     )
         return subtitles, audios
@@ -183,8 +188,10 @@ class EditMkvMetadataCommand(ICommand):
         audios: list[dict],
     ) -> None:
         for subtitle in subtitles:
-            if subtitle["track_name"] == "Español" and not any(
-                s["track_name"] == "Forced" for s in subtitles
+            if (
+                self.param != "movies"
+                and subtitle["track_name"] == "Español"
+                and not any(s["track_name"] == "Forced" for s in subtitles)
             ):
                 subtitle["is_default"] = True
 
@@ -227,6 +234,24 @@ class EditMkvMetadataCommand(ICommand):
         for audio in audios:
             match (self.param, audio["track_name"]):
                 case "series", "日本語":
+                    self._add_new_track(
+                        file,
+                        audio["path"],
+                        audio["language"],
+                        audio["track_name"],
+                        audio["is_default"],
+                    )
+
+                case "movies", "日本語":
+                    self._add_new_track(
+                        file,
+                        audio["path"],
+                        audio["language"],
+                        audio["track_name"],
+                        audio["is_default"],
+                    )
+
+                case "movies", "Español":
                     self._add_new_track(
                         file,
                         audio["path"],
@@ -290,6 +315,11 @@ class EditMkvMetadataCommand(ICommand):
                     track.default_track = True
 
                 case ("movies", "video", "und"):
+                    track.language = "eng"
+                    track.track_name = "English"
+                    track.default_track = True
+
+                case ("movies", "video", "spa"):
                     track.language = "eng"
                     track.track_name = "English"
                     track.default_track = True
