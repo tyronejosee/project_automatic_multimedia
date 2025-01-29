@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 import subprocess
 
@@ -99,23 +100,37 @@ class ExtractMediaCommand(ICommand):
         }
         return extensions.get(codec, "")
 
-    def _extract_subtitle(self, file: str, track: MKVTrack) -> None:
+    def _get_track_delays(self, file_path: str, track_id: int) -> int:
         """
-        Extracts a subtitle track from a file.
+        Gets the delays from an file using MediaInfo.
         """
-        parent_directory: str = os.path.dirname(file)
-        sub_type: str = self._get_subtitle_extension(str(track._track_codec))
-        output_file_name: str = (
-            f"[{track.language}] {track.track_name or 'Subtitle'}{sub_type}"
-        )
-        output_file_path: str = os.path.join(
-            parent_directory,
-            output_file_name,
-        )
-        track_id: int = track.track_id or 0
+        command: list[str] = ["mediainfo", "--Output=JSON", file_path]
 
-        self._run_mkvextract(file, track_id, output_file_path)
-        print(f"Subtitle extracted to: {output_file_path}")
+        try:
+            result: subprocess.CompletedProcess[str] = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            mediainfo_data: dict = json.loads(result.stdout)
+            tracks: list[dict] = mediainfo_data["media"]["track"]
+
+            for track in tracks:
+                if (
+                    track["@type"] == "Audio"
+                    and int(track["StreamOrder"]) == track_id
+                ):
+                    delay: int = 0
+                    if "Delay" in track:
+                        delay_str: str = track["Delay"]
+                        delay = (
+                            int(float(delay_str) * 1000) if delay_str else 0
+                        )
+            return delay
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Error getting track delays for {file_path}: {e}")
+            return 0
 
     def _extract_audio(self, file: str, track: MKVTrack) -> None:
         """
@@ -123,17 +138,39 @@ class ExtractMediaCommand(ICommand):
         """
         parent_directory: str = os.path.dirname(file)
         audio_type: str = self._get_audio_extension(str(track._track_codec))
-        output_file_name: str = (
-            f"[{track.language}] {track.track_name or 'Audio'}{audio_type}"
+        delay: int = self._get_track_delays(file, track.track_id or 0)
+
+        file_name: str = (
+            f"[{track.language}] TRACK {track.track_id} "
+            f"{track.track_name or ''} DELAY {delay}ms{audio_type}"
         )
-        output_file_path: str = os.path.join(
+        output_path: str = os.path.join(
             parent_directory,
-            output_file_name,
+            file_name,
         )
         track_id: int = track.track_id or 0
 
-        self._run_mkvextract(file, track_id, output_file_path)
-        print(f"Audio extracted to: {output_file_path}")
+        self._run_mkvextract(file, track_id, output_path)
+        logging.info(f"Audio extracted to: {output_path}")
+
+    def _extract_subtitle(self, file: str, track: MKVTrack) -> None:
+        """
+        Extracts a subtitle track from a file.
+        """
+        parent_directory: str = os.path.dirname(file)
+        sub_type: str = self._get_subtitle_extension(str(track._track_codec))
+        file_name: str = (
+            f"[{track.language}] TRACK {track.track_id} "
+            f"{track.track_name or ''}{sub_type}"
+        )
+        output_path: str = os.path.join(
+            parent_directory,
+            file_name,
+        )
+        track_id: int = track.track_id or 0
+
+        self._run_mkvextract(file, track_id, output_path)
+        logging.info(f"Subtitle extracted to: {output_path}")
 
     def _run_mkvextract(
         self,
