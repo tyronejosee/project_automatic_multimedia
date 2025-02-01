@@ -63,6 +63,16 @@ class IConfig(ABC):
 
     @property
     @abstractmethod
+    def LIBRARY_PATHS(self) -> list:
+        pass
+
+    @property
+    @abstractmethod
+    def DISK_PATHS(self) -> list:
+        pass
+
+    @property
+    @abstractmethod
     def ELEMENTS_TO_SCRAPE(self) -> dict[str, str]:
         pass
 

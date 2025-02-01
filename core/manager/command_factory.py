@@ -5,6 +5,8 @@ from core.commands.edit_mkv_metadata import EditMkvMetadataCommand
 from core.commands.extract_media import ExtractMediaCommand
 from core.commands.generate_anime_folders import GenerateAnimeFoldersCommand
 from core.commands.generate_icon_folders import GenerateIconFoldersCommand
+from core.commands.scan_disk import ScanDiskCommand
+from core.commands.scan_library import ScanLibraryCommand
 from core.commands.set_folder_icons import SetFolderIcons
 from core.interfaces.command_interface import ICommand
 from core.interfaces.config_interface import IConfig
@@ -38,7 +40,7 @@ class CommandFactory:
             ),
             "set_folder_icons": SetFolderIcons(
                 param,
-                cf.INPUT_FOLDER,
+                cf.DIRECTORY,
                 cf.ICON_FOLDER,
             ),
             "data_loader": DataLoaderCommand(
@@ -56,6 +58,12 @@ class CommandFactory:
             "generate_type_folders": GenerateIconFoldersCommand(
                 param,
                 cf.ICON_FOLDER,
+            ),
+            "scan_disk": ScanDiskCommand(
+                cf.DISK_PATHS,
+            ),
+            "scan_library": ScanLibraryCommand(
+                cf.LIBRARY_PATHS,
             ),
             "extract_subtitles": ExtractMediaCommand(
                 cf.DIRECTORY,

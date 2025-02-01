@@ -141,7 +141,7 @@ class ExtractMediaCommand(ICommand):
         delay: int = self._get_track_delays(file, track.track_id or 0)
 
         file_name: str = (
-            f"[{track.language}] TRACK {track.track_id} "
+            f"[{track.language}] [{track.track_id}] "
             f"{track.track_name or ''} DELAY {delay}ms{audio_type}"
         )
         output_path: str = os.path.join(
@@ -160,7 +160,7 @@ class ExtractMediaCommand(ICommand):
         parent_directory: str = os.path.dirname(file)
         sub_type: str = self._get_subtitle_extension(str(track._track_codec))
         file_name: str = (
-            f"[{track.language}] TRACK {track.track_id} "
+            f"[{track.language}] [{track.track_id}] "
             f"{track.track_name or ''}{sub_type}"
         )
         output_path: str = os.path.join(

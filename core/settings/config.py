@@ -29,6 +29,8 @@ class Config(IConfig):
     MOVIES_SIZE: tuple = (165, 256)
 
     SUPPORTED_FORMATS: list = [".jpg", ".jpeg"]
+    LIBRARY_PATHS: list = ["D:\\Archives\\Series", "D:\\Archives\\Movies"]
+    DISK_PATHS: list = ["A:\\", "C:\\", "D:\\"]
 
     ELEMENTS_TO_SCRAPE: dict[str, str] = {
         "title_jpn": "h1.title-name.h1_bold_none > strong",
