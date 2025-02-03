@@ -29,7 +29,12 @@ class Config(IConfig):
     MOVIES_SIZE: tuple = (165, 256)
 
     SUPPORTED_FORMATS: list = [".jpg", ".jpeg"]
-    LIBRARY_PATHS: list = ["D:\\Archives\\Series", "D:\\Archives\\Movies"]
+    LIBRARY_PATHS: list = [
+        "D:\\Archives\\Series",
+        "D:\\Archives\\Movies",
+        "C:\\Archives\\Movies",
+        "C:\\Archives\\Series",
+    ]
     DISK_PATHS: list = ["A:\\", "C:\\", "D:\\"]
 
     ELEMENTS_TO_SCRAPE: dict[str, str] = {

@@ -4,6 +4,8 @@ import ctypes
 import logging
 from pathlib import Path
 
+from slugify import slugify
+
 from core.interfaces.command_interface import ICommand
 from core.utils.logging import setup_logging
 
@@ -18,16 +20,16 @@ class ScanDiskCommand(ICommand):
         """
         Main method that executes the command.
         """
-        disk_data: list = []
         for disk_path in self.disk_paths:
-            data = self._get_disk_usage(disk_path)
+            disk_data: list = []
+            data: dict | None = self._get_disk_usage(disk_path)
             if data:
                 disk_data.append(data)
-
-        download_folder = Path.home() / "Downloads"
-        output_file = download_folder / "disk_usage.json"
-        self._save_to_json(disk_data, output_file)
-        logging.info(f"Disk usage data saved to '{output_file}'")
+                download_folder: Path = Path.home() / "Downloads"
+                filename: str = slugify(data["volume_label"])
+                output_file: Path = download_folder / f"{filename}-info.json"
+                self._save_to_json(disk_data, output_file)
+                logging.info(f"Disk usage data saved to '{output_file}'")
 
     def _get_disk_usage(self, disk_path: str) -> dict | None:
         """
@@ -46,9 +48,12 @@ class ScanDiskCommand(ICommand):
             total_gb: float = total_bytes.value / (1024**3)
             free_gb: float = free_bytes.value / (1024**3)
             used_gb: float = total_gb - free_gb
-            percent_used: float = (used_gb / total_gb) * 100
+            # percent_used: float = (used_gb / total_gb) * 100
+            percent_used: int = round((used_gb / total_gb) * 100)
 
-            volume_label, drive_name = self._get_volume_label_and_drive(disk_path)
+            volume_label, drive_name = self._get_volume_label_and_drive(
+                disk_path,
+            )
 
             disk_info: dict = {
                 "drive_name": drive_name,
@@ -56,7 +61,7 @@ class ScanDiskCommand(ICommand):
                 "total": f"{total_gb:.0f} GB",
                 "used": f"{used_gb:.0f} GB",
                 "free": f"{free_gb:.0f} GB",
-                "percent_used": f"{percent_used:.0f}%",
+                "percent_used": percent_used,
             }
             return disk_info
 
@@ -64,10 +69,10 @@ class ScanDiskCommand(ICommand):
         """
         Gets the volume label and the disk name.
         """
-        volume_label = ctypes.create_unicode_buffer(255)
-        file_system_name = ctypes.create_unicode_buffer(255)
+        volume_label: ctypes.Array = ctypes.create_unicode_buffer(255)
+        file_system_name: ctypes.Array = ctypes.create_unicode_buffer(255)
 
-        result = ctypes.windll.kernel32.GetVolumeInformationW(
+        result: int = ctypes.windll.kernel32.GetVolumeInformationW(
             disk_path,
             volume_label,
             len(volume_label),
@@ -86,7 +91,7 @@ class ScanDiskCommand(ICommand):
         drive_name: str = os.path.splitdrive(disk_path)[0]
         return volume_label_str, drive_name
 
-    def _save_to_json(self, data: dict, output_file: Path) -> None:
+    def _save_to_json(self, data: list, output_file: Path) -> None:
         """
         Saves the results to a JSON file.
         """
