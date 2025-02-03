@@ -28,6 +28,7 @@ class CommandFactory:
                 cf.INPUT_FOLDER,
                 cf.TEMP_FOLDER,
                 cf.OUTPUT_FOLDER,
+                cf.ICON_FOLDER,
                 cf.DESIRED_WIDTH,
                 cf.DESIRED_HEIGHT,
                 cf.SUPPORTED_FORMATS,
@@ -69,6 +70,29 @@ class CommandFactory:
                 cf.DIRECTORY,
             ),
             # Composite Commands
+            "build_folders": CompositeCommand(
+                CopyCoversCommand(
+                    cf.DIRECTORY,
+                    cf.OUTPUT_FOLDER,
+                ),
+                BuildIconsCommand(
+                    param,
+                    cf.SERIES_SIZE,
+                    cf.MOVIES_SIZE,
+                    cf.INPUT_FOLDER,
+                    cf.TEMP_FOLDER,
+                    cf.OUTPUT_FOLDER,
+                    cf.ICON_FOLDER,
+                    cf.DESIRED_WIDTH,
+                    cf.DESIRED_HEIGHT,
+                    cf.SUPPORTED_FORMATS,
+                ),
+                SetFolderIcons(
+                    param,
+                    cf.DIRECTORY,
+                    cf.ICON_FOLDER,
+                ),
+            ),
             "generate_folders_with_icon": CompositeCommand(
                 GenerateIconFoldersCommand(
                     param,
