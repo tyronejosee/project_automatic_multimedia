@@ -46,8 +46,8 @@ class ExtractMediaCommand(ICommand):
         """
         file: MKVFile = MKVFile(file_path)
         for track in file.tracks:
-            S_LANGUAGES: set[str] = {"spa"}
-            A_LANGUAGES: set[str] = {"spa", "jpn"}
+            S_LANGUAGES: set[str] = {"spa", "lat"}
+            A_LANGUAGES: set[str] = {"spa", "lat", "jpn"}
             A_EXCLUDED_CODECS: set[str] = {"AAC"}
 
             match (

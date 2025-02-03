@@ -17,7 +17,7 @@ class SetFolderIcons(ICommand):
         icon_folder: str,
     ) -> None:
         self.param: str = param
-        self.input_folder: str = input_folder
+        self.workspace_folder: str = input_folder
         self.icon_folder: str = icon_folder
         self.valid_params: list[str] = ["series", "movies"]
 
@@ -26,9 +26,9 @@ class SetFolderIcons(ICommand):
         Main method that executes the command.
         """
         type_choice: str = self._get_type_choice()
-        for subfolder_name in os.listdir(self.input_folder):
+        for subfolder_name in os.listdir(self.workspace_folder):
             subfolder_path: str = os.path.join(
-                self.input_folder,
+                self.workspace_folder,
                 subfolder_name,
             )
             if os.path.isdir(subfolder_path):

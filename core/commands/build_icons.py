@@ -5,6 +5,7 @@ import logging
 from PIL import Image
 
 from core.interfaces.command_interface import ICommand
+from core.utils.exceptions import CommandNotFound
 from core.utils.logging import setup_logging
 
 setup_logging()
@@ -19,6 +20,7 @@ class BuildIconsCommand(ICommand):
         input_folder: str,
         temp_folder: str,
         output_folder: str,
+        icon_folder: str,
         desired_width: int,
         desired_height: int,
         supported_formats: list,
@@ -29,9 +31,11 @@ class BuildIconsCommand(ICommand):
         self.input_folder: str = input_folder
         self.temp_folder: str = temp_folder
         self.output_folder: str = output_folder
+        self.icon_folder: str = icon_folder
         self.desired_width: int = desired_width
         self.desired_height: int = desired_height
         self.supported_formats: list = supported_formats
+        self.valid_params: list[str] = ["series", "movies"]
 
     def execute(self) -> None:
         """
@@ -46,11 +50,14 @@ class BuildIconsCommand(ICommand):
             logging.info("Invalid choice.")
             return
 
+        type_choice: str = self._get_type_choice()
+        icon_path: str = f"{self.icon_folder}\\{type_choice}"
+
         self._process_images(
             chosen_size,
             self.input_folder,
             self.temp_folder,
-            self.output_folder,
+            icon_path,
         )
         logging.info("Completed.")
         shutil.rmtree(self.temp_folder)
@@ -60,13 +67,13 @@ class BuildIconsCommand(ICommand):
         size: tuple,
         input_folder: str,
         temp_folder: str,
-        output_folder: str,
+        icon_path: str,
     ) -> None:
         """
         Processes each JPG img in input folder, resizing and converting to PNG.
         """
         self._ensure_folder_exists(temp_folder)
-        self._ensure_folder_exists(output_folder)
+        self._ensure_folder_exists(icon_path)
 
         for filename in os.listdir(input_folder):
             if self._is_supported_image(filename):
@@ -76,7 +83,7 @@ class BuildIconsCommand(ICommand):
                 )
                 self._resize_image(input_path, temp_path, size)
                 output_path: str = os.path.join(
-                    output_folder, os.path.splitext(filename)[0] + ".ico"
+                    icon_path, os.path.splitext(filename)[0] + ".ico"
                 )
                 self._add_transparent_space(temp_path, output_path)
             else:
@@ -133,6 +140,20 @@ class BuildIconsCommand(ICommand):
         """
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
+
+    def _get_type_choice(self) -> str:
+        """
+        Returns the folder type based on the parameter.
+        """
+        if self.param == "Unknown":
+            raise CommandNotFound("Usage 'cli.py <command> <param>'")
+        if self.param not in self.valid_params:
+            raise ValueError(f"Invalid type choice '{self.param}'")
+        type_choice: str = {
+            "series": "Series",
+            "movies": "Movies",
+        }.get(self.param, "unknown")
+        return type_choice
 
     def _is_supported_image(self, filename: str) -> bool:
         """
