@@ -49,6 +49,7 @@ class ScanLibraryCommand(ICommand):
                 genre_path: str = os.path.join(base_path, genre)
                 if os.path.isdir(genre_path):
                     for folder in os.listdir(genre_path):
+                        folder_slug: str = slugify(folder)
                         folder_name: str = re.sub(r"_ ", ": ", folder)
                         movie_path: str = os.path.join(genre_path, folder)
                         if os.path.isdir(movie_path):
@@ -64,6 +65,8 @@ class ScanLibraryCommand(ICommand):
                                     "folder_name": folder_name,
                                     "file_name": file_name,
                                     "file_size": file_size,
+                                    "slug": folder_slug,
+                                    "image": f"/{type_folder.lower()}/{folder_slug}.webp",
                                     "genre": genre,
                                     "type": type_folder,
                                     "has_file": has_file,

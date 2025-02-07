@@ -30,12 +30,20 @@ class Config(IConfig):
 
     SUPPORTED_FORMATS: list = [".jpg", ".jpeg"]
     LIBRARY_PATHS: list = [
-        "D:\\Archives\\Series",
-        "D:\\Archives\\Movies",
         "C:\\Archives\\Movies",
         "C:\\Archives\\Series",
+        "D:\\Archives\\Movies",
+        "D:\\Archives\\Series",
+        "E:\\Archives\\Movies",
+        "E:\\Archives\\Series",
+        "F:\\Archives\\Movies",
+        "F:\\Archives\\Series",
+        "G:\\Archives\\Movies",
+        "G:\\Archives\\Series",
+        "H:\\Archives\\Movies",
+        "H:\\Archives\\Series",
     ]
-    DISK_PATHS: list = ["A:\\", "C:\\", "D:\\"]
+    DISK_PATHS: list = ["A:\\", "C:\\", "D:\\", "E:\\", "F:\\", "G:\\", "H:\\"]
 
     ELEMENTS_TO_SCRAPE: dict[str, str] = {
         "title_jpn": "h1.title-name.h1_bold_none > strong",
