@@ -11,12 +11,16 @@ from core.repositories.serie_repository import SerieRepository
 
 
 class Database:
+    """
+    Singleton class for managing the SQLite database connection and setup.
+    """
+
     _instance: Optional["Database"] = None
     _connection: Optional[Connection] = None
 
     def __new__(cls, db_name="database.db"):
         """
-        Pending.
+        Ensures that only one instance of the Database class exists.
         """
         if cls._instance is None:
             cls._instance = super(Database, cls).__new__(cls)
@@ -25,19 +29,23 @@ class Database:
 
     def __init__(self, db_name="database.db") -> None:
         """
-        Pending.
+        Initializes the Database instance, ensuring the database name is set.
         """
         if not hasattr(self, "db_name"):
             self.db_name: str = db_name
 
     def connect(self) -> Connection:
+        """
+        Establishes and returns a connection to the SQLite database.
+        """
         if self._connection is None:
             self._connection: Connection = sqlite3.connect(self.db_name)
         return self._connection
 
     def setup(self) -> None:
         """
-        Pending.
+        Creates the necessary tables for
+        movies and series if they do not exist.
         """
         with self.connect() as conn:
             cursor: Cursor = conn.cursor()
@@ -69,16 +77,20 @@ class Database:
 
     def close(self) -> None:
         """
-        Pending.
+        Closes the database connection if it is open.
         """
         if self._connection:
             self._connection.close()
             self._connection = None
 
     def get_movie_repository(self) -> MovieRepository:
-        """Returns a MovieRepository intance."""
+        """
+        Returns a MovieRepository intance.
+        """
         return MovieRepository(self.connect())
 
     def get_serie_repository(self) -> SerieRepository:
-        """Returns a SerieRepository intance."""
+        """
+        Returns a SerieRepository intance.
+        """
         return SerieRepository(self.connect())

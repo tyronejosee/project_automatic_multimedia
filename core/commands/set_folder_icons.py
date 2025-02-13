@@ -3,7 +3,7 @@ import logging
 import subprocess
 
 from core.interfaces.command_interface import ICommand
-from core.utils.exceptions import CommandNotFound
+from core.utils.functions import get_type_choice
 from core.utils.logging import setup_logging
 
 setup_logging()
@@ -25,7 +25,7 @@ class SetFolderIcons(ICommand):
         """
         Main method that executes the command.
         """
-        type_choice: str = self._get_type_choice()
+        type_choice: str = get_type_choice(self.param, self.valid_params)
         for subfolder_name in os.listdir(self.workspace_folder):
             subfolder_path: str = os.path.join(
                 self.workspace_folder,
@@ -65,17 +65,3 @@ class SetFolderIcons(ICommand):
 
         subprocess.run(["attrib", "+s", folder_path], shell=True)
         subprocess.run(["attrib", "+h", desktop_ini_path], shell=True)
-
-    def _get_type_choice(self) -> str:
-        """
-        Returns the folder type based on the parameter.
-        """
-        if self.param == "Unknown":
-            raise CommandNotFound("Usage 'cli.py <command> <param>'")
-        if self.param not in self.valid_params:
-            raise ValueError(f"Invalid type choice '{self.param}'")
-        type_choice: str = {
-            "series": "Series",
-            "movies": "Movies",
-        }.get(self.param, "unknown")
-        return type_choice
