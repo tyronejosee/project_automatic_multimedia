@@ -48,7 +48,6 @@ class ScanDiskCommand(ICommand):
             total_gb: float = total_bytes.value / (1024**3)
             free_gb: float = free_bytes.value / (1024**3)
             used_gb: float = total_gb - free_gb
-            # percent_used: float = (used_gb / total_gb) * 100
             percent_used: int = round((used_gb / total_gb) * 100)
 
             volume_label, drive_name = self._get_volume_label_and_drive(
@@ -58,9 +57,9 @@ class ScanDiskCommand(ICommand):
             disk_info: dict = {
                 "drive_name": drive_name,
                 "volume_label": volume_label,
-                "total": f"{total_gb:.0f} GB",
-                "used": f"{used_gb:.0f} GB",
-                "free": f"{free_gb:.0f} GB",
+                "total": round(total_gb, 2),
+                "used": round(used_gb, 2),
+                "free": round(free_gb, 2),
                 "percent_used": percent_used,
             }
             return disk_info
