@@ -1,5 +1,6 @@
 from core.commands.build_icons import BuildIconsCommand
 from core.commands.clean_files import CleanFilesCommand
+from core.commands.resize_posters import ResizePostersCommand
 from core.commands.copy_covers import CopyCoversCommand
 from core.commands.data_loader import DataLoaderCommand
 from core.commands.edit_mkv_metadata import EditMkvMetadataCommand
@@ -48,6 +49,10 @@ class CommandFactory:
             "data_loader": DataLoaderCommand(
                 param,
                 cf.ICON_FOLDER,
+            ),
+            "resize_posters": ResizePostersCommand(
+                param,
+                cf.DIRECTORY,
             ),
             "clean_files": CleanFilesCommand(
                 cf.DIRECTORY,
