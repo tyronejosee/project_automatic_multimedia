@@ -43,7 +43,21 @@ class Config(IConfig):
         "H:\\Archives\\Movies",
         "H:\\Archives\\Series",
     ]
-    DISK_PATHS: list = ["A:\\", "C:\\", "D:\\", "E:\\", "F:\\", "G:\\", "H:\\"]
+    CLEAN_FILES: list[str] = [
+        ".info",
+        "desktop.ini",
+        "Thumbs.db",
+        ".DS_Store",
+    ]
+    DISK_PATHS: list = [
+        "A:\\",
+        "C:\\",
+        "D:\\",
+        "E:\\",
+        "F:\\",
+        "G:\\",
+        "H:\\",
+    ]
 
     ELEMENTS_TO_SCRAPE: dict[str, str] = {
         "title_jpn": "h1.title-name.h1_bold_none > strong",

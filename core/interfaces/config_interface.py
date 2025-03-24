@@ -68,6 +68,11 @@ class IConfig(ABC):
 
     @property
     @abstractmethod
+    def CLEAN_FILES(self) -> list:
+        pass
+
+    @property
+    @abstractmethod
     def DISK_PATHS(self) -> list:
         pass
 
