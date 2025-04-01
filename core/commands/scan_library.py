@@ -50,7 +50,10 @@ class ScanLibraryCommand(ICommand):
                 if os.path.isdir(genre_path):
                     for folder in os.listdir(genre_path):
                         folder_slug: str = slugify(folder)
-                        folder_name: str = re.sub(r"_ ", ": ", folder)
+                        folder_name: str = re.sub(r" \((\d{4})\)", "", folder)
+                        folder_name: str = re.sub(r"_ ", ": ", folder_name)
+                        match = re.search(r"\((\d{4})\)", folder)
+                        year: str = match.group(1) if match else "0000"
                         movie_path: str = os.path.join(genre_path, folder)
                         if os.path.isdir(movie_path):
                             (
@@ -65,6 +68,7 @@ class ScanLibraryCommand(ICommand):
                                     "folder_name": folder_name,
                                     "file_name": file_name,
                                     "file_size": file_size,
+                                    "year": year,
                                     "slug": folder_slug,
                                     "image": f"/{type_folder.lower()}/{folder_slug}.webp",
                                     "genre": genre,
@@ -109,7 +113,11 @@ class ScanLibraryCommand(ICommand):
                 file_size_in_gb: float = os.path.getsize(file_path) / (1024**3)
 
                 if ext in video_extensions:
-                    file_name = file.replace("- 01.mkv", "").strip()
+                    file_name = re.sub(
+                        r" - 01\.(mkv|mp4|avi)$",
+                        "",
+                        file,
+                    ).strip()
                     file_name = re.sub(r"_ ", ": ", file_name)
                     file_size = f"{file_size_in_gb:.2f} GB"
                     has_file = True
